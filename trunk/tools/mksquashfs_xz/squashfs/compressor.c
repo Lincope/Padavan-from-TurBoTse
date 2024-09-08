@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2009, 2010, 2011, 2022
+ * Copyright (c) 2009, 2010, 2011, 2022, 2024
  * Phillip Lougher <phillip@squashfs.org.uk>
  *
  * This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@
 
 #include "compressor.h"
 #include "squashfs_fs.h"
+#include "print_pager.h"
 
 #ifndef GZIP_SUPPORT
 static struct compressor gzip_comp_ops =  {
@@ -117,18 +118,18 @@ struct compressor *lookup_compressor_id(int id)
 
 void display_compressors(FILE *stream, char *indent, char *def_comp)
 {
-	int i;
+	int i, cols = get_column_width();
 
 	for(i = 0; compressor[i]->id; i++)
 		if(compressor[i]->supported)
-			fprintf(stream, "%s\t%s%s\n", indent,
+			autowrap_printf(stream, cols, "%s\t%s%s\n", indent,
 				compressor[i]->name,
 				strcmp(compressor[i]->name, def_comp) == 0 ?
 				" (default)" : "");
 }
 
 
-void display_compressor_usage(FILE *stream, char *def_comp)
+void display_compressor_usage(FILE *stream, char *def_comp, int cols)
 {
 	int i;
 
@@ -137,43 +138,50 @@ void display_compressor_usage(FILE *stream, char *def_comp)
 			char *str = strcmp(compressor[i]->name, def_comp) == 0 ?
 				" (default)" : "";
 			if(compressor[i]->usage) {
-				fprintf(stream, "\t%s%s\n",
+				autowrap_printf(stream, cols, "\t%s%s\n",
 					compressor[i]->name, str);
-				compressor[i]->usage(stream);
+				compressor[i]->usage(stream, cols);
 			} else
-				fprintf(stream, "\t%s (no options)%s\n",
-					compressor[i]->name, str);
+				autowrap_printf(stream, cols, "\t%s (no "
+					"options)%s\n", compressor[i]->name,
+					str);
 		}
 }
 
 
 void print_selected_comp_options(FILE *stream, struct compressor *comp, char *prog_name)
 {
-	fprintf(stream, "%s: selected compressor \"%s\".  Options supported: %s\n",
-		prog_name, comp->name, comp->usage ? "" : "none");
+	int cols = get_column_width();
+
+	autowrap_printf(stream, cols, "%s: selected compressor \"%s\".  "
+		"Options supported: %s\n", prog_name, comp->name, comp->usage ?
+		"" : "none");
 	if(comp->usage)
-		comp->usage(stream);
+		comp->usage(stream, cols);
 }
 
 
 void print_compressor_options(char *comp_name, char *prog_name)
 {
-	int i;
+	int i, cols = get_column_width();
 
 	for(i = 0; compressor[i]->id; i++)
 		if(compressor[i]->supported && strcmp(compressor[i]->name, comp_name) == 0) {
 			struct compressor *comp = compressor[i];
 
-			printf("%s: compressor \"%s\".  Options supported: %s\n",
-				prog_name, comp->name, comp->usage ? "" : "none");
+			autowrap_printf(stdout, cols, "%s: compressor \"%s\".  "
+				"Options supported: %s\n", prog_name,
+				comp->name, comp->usage ? "" : "none");
 			if(comp->usage)
-				comp->usage(stdout);
+				comp->usage(stdout, cols);
 
 			return;
 	}
 
-	fprintf(stderr, "%s: Compressor \"%s\" is not supported!\n", prog_name, comp_name);
-	fprintf(stderr, "%s: Compressors available:\n", prog_name);
+	autowrap_printf(stderr, cols, "%s: Compressor \"%s\" is not "
+		"supported!\n", prog_name, comp_name);
+	autowrap_printf(stderr, cols, "%s: Compressors available:\n",
+		prog_name);
 	display_compressors(stderr, "", COMP_DEFAULT);
 	exit(1);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, 2021, 2022
+ * Copyright (c) 2017, 2021, 2022, 2024
  * Phillip Lougher <phillip@squashfs.org.uk>
  *
  * This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@
 #include "squashfs_fs.h"
 #include "zstd_wrapper.h"
 #include "compressor.h"
+#include "print_pager.h"
 
 static int compression_level = ZSTD_DEFAULT_COMPRESSION_LEVEL;
 
@@ -232,11 +233,11 @@ static int zstd_uncompress(void *dest, void *src, int size, int outsize,
 	return (int)res;
 }
 
-static void zstd_usage(FILE *stream)
+static void zstd_usage(FILE *stream, int cols)
 {
-	fprintf(stream, "\t  -Xcompression-level <compression-level>\n");
-	fprintf(stream, "\t\t<compression-level> should be 1 .. %d (default "
-		"%d)\n", ZSTD_maxCLevel(), ZSTD_DEFAULT_COMPRESSION_LEVEL);
+	autowrap_print(stream, "\t  -Xcompression-level <compression-level>\n", cols);
+	autowrap_printf(stream, cols, "\t\t<compression-level> should be 1 .. %d (default %d)\n",
+				ZSTD_maxCLevel(), ZSTD_DEFAULT_COMPRESSION_LEVEL);
 }
 
 

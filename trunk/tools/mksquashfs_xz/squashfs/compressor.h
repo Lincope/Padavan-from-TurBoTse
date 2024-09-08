@@ -2,7 +2,7 @@
 #define COMPRESSOR_H
 /*
  *
- * Copyright (c) 2009, 2010, 2011, 2012, 2013, 2014, 2022
+ * Copyright (c) 2009, 2010, 2011, 2012, 2013, 2014, 2022, 2024
  * Phillip Lougher <phillip@squashfs.org.uk>
  *
  * This program is free software; you can redistribute it and/or
@@ -35,14 +35,14 @@ struct compressor {
 	int (*extract_options)(int, void *, int);
 	int (*check_options)(int, void *, int);
 	void (*display_options)(void *, int);
-	void (*usage)(FILE *);
+	void (*usage)(FILE *, int cols);
 	int (*option_args)(char *);
 };
 
 extern struct compressor *lookup_compressor(char *);
 extern struct compressor *lookup_compressor_id(int);
 extern void display_compressors(FILE *stream, char *, char *);
-extern void display_compressor_usage(FILE *stream, char *);
+extern void display_compressor_usage(FILE *stream, char *, int cols);
 extern void print_selected_comp_options(FILE *stream, struct compressor *comp, char *prog_name);
 extern void print_compressor_options(char *comp_name, char *prog_name);
 

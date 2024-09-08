@@ -203,6 +203,8 @@ struct nvram_pair router_defaults[] = {
 	{ "wl_PktAggregate", "1" },
 	{ "wl_APSDCapable", "0" },
 	{ "wl_HT_OpMode", "1" },
+	{ "wl_pmf", "0" },
+	{ "wl_pmfsha256", "0" },
 #if BOARD_HAS_5G_11AC
 	{ "wl_HT_BW", "2" },
 #else
@@ -227,6 +229,11 @@ struct nvram_pair router_defaults[] = {
 	{ "wl_preamble", "1" },
 	{ "wl_greenap", "0" },				/* 5GHz GreenAP */
 	{ "wl_ldpc", "3" },
+#if defined (USE_WID_5G) && (USE_WID_5G==7615 || USE_WID_5G==7915)
+	{ "wl_stbc", "3" },
+#else
+	{ "wl_stbc", "0" },
+#endif
 	{ "wl_HT_RDG", "0" },
 #if defined (USE_WID_5G) && (USE_WID_5G==7615 || USE_WID_5G==7915)
 	{ "wl_HT_AMSDU", "1" },
@@ -333,6 +340,8 @@ struct nvram_pair router_defaults[] = {
 	{ "rt_stream_rx", STR(BOARD_NUM_ANT_2G_RX) },
 	{ "rt_preamble", "1" },
 	{ "rt_greenap", "0" },			/* 2.4GHz GreenAP */
+	{ "rt_pmf", "0" },
+	{ "rt_pmfsha256", "0" },
 	{ "rt_HT_RDG", "0" },
 	{ "rt_HT_AMSDU", "1" },
 	{ "rt_HT_80211KV", "0" },
@@ -348,6 +357,7 @@ struct nvram_pair router_defaults[] = {
 	{ "rt_HT_BAWinSize", "64" },
 	{ "rt_ldpc", "0" },
 #endif
+	{ "rt_stbc", "1" },
 	{ "rt_HT_AutoBA", "1" },
 	{ "rt_VgaClamp", "0" },
 	{ "rt_KickStaRssiLow", "0" },
@@ -445,7 +455,7 @@ struct nvram_pair router_defaults[] = {
 	{ "ip6_dns2", "" },
 	{ "ip6_dns3", "" },
 
-	{ "ip6_lan_auto", "0" },
+	{ "ip6_lan_auto", "1" },
 	{ "ip6_lan_addr", "fc00:101:101::1" },
 	{ "ip6_lan_size", "64" },
 	{ "ip6_lan_radv", "1" },

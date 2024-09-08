@@ -20,10 +20,13 @@ on:
         - DIR-882
         - EA7500
         - G-AX1800
+        - G-AX1800-B
         - GHL
         - HAR-20S2U1
         - JCG-836PRO
         - JCG-AC860M
+        - JCG-Q10Pro
+        - JCG-Q10Pro-PB
         - JCG-Q11Pro
         - JCG-Q20
         - JCG-Q20-PB

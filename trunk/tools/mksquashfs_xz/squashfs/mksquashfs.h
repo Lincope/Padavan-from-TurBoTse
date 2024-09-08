@@ -146,8 +146,9 @@ struct append_file {
 #define I_COUNT_SIZE		128
 #define DIR_ENTRIES		32
 #define INODE_HASH_SIZE		65536
-#define INODE_HASH_MASK		(INODE_HASH_SIZE - 1)
-#define INODE_HASH(dev, ino)	(ino & INODE_HASH_MASK)
+#define INO_MASK(ino, shift)	((((unsigned long long) ino) >> shift) & 0xffff)
+#define INODE_HASH(dev, ino)	((INO_MASK(ino, 0) + INO_MASK(ino, 16) + \
+				INO_MASK(ino, 32) + INO_MASK(ino, 48)) & 0xffff)
 
 struct cached_dir_index {
 	struct squashfs_dir_index	index;
