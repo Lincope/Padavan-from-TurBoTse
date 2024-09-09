@@ -25,7 +25,7 @@
 
 struct nvram_pair router_defaults[] = {
 	/* Restore defaults */
-	{ "restore_defaults", "0" },    /* Set to 0 to not restore defaults on boot */
+	{ "restore_defaults", "0" },	/* Set to 0 to not restore defaults on boot */
 	{ "nvram_manual", "0" },		/* Manual commit mode: 1: manual, 0: auto */
 
 #if defined (USE_NAND_FLASH)
