@@ -57,7 +57,7 @@ static char *sqfscat_options[]={ "", "", "-version", "-processors", "-mem",
 	"-mem-percent", "-offset", "-ignore-errors", "-strict-errors",
 	"-no-exit-code", "", "", "","-no-wildcards", "-regex", "", "", "",
 	"-help", "-help-option", "-help-section", "-help-all", "-ho", "-hs",
-	NULL,
+	"-ha", NULL,
 };
 
 static char *unsquashfs_args[]={
@@ -73,7 +73,7 @@ static char *unsquashfs_args[]={
 static char *sqfscat_args[]={
 	"", "", "", "<number>", "<size>", "<percent>", "<bytes>", "", "", "",
 	"", "", "", "", "", "", "", "", "", "<regex>", "<section>", "",
-	"<regex>", "<section>"
+	"<regex>", "<section>", ""
 };
 
 static char *unsquashfs_sections[]={
@@ -221,16 +221,24 @@ static char *unsquashfs_text[]={
 static char *sqfscat_text[]={
 	"Runtime options:", "\n",
 	"\t-v[ersion]\t\tprint version, licence and copyright information\n",
-	"\t-p[rocessors] <number>\tuse <number> processors.  By default will use the number of processors available\n",
-	"\t-mem <size>\t\tuse <size> physical memory for caches.  Use K, M or G to specify Kbytes, Mbytes or Gbytes respectively.  Default 512 Mbytes\n",
+	"\t-p[rocessors] <number>\tuse <number> processors.  By default will "
+		"use the number of processors available\n",
+	"\t-mem <size>\t\tuse <size> physical memory for caches.  Use K, M or "
+		"G to specify Kbytes, Mbytes or Gbytes respectively.  Default "
+		"512 Mbytes\n",
 	"\t-mem-percent <percent>\tuse <percent> physical memory for caches.\n",
-	"\t-o[ffset] <bytes>\tskip <bytes> at start of FILESYSTEM.  Optionally a suffix of K, M or G can be given to specify Kbytes, Mbytes or Gbytes respectively (default 0 bytes).\n",
-	"\t-ig[nore-errors]\ttreat errors writing files to stdout as non-fatal\n",
+	"\t-o[ffset] <bytes>\tskip <bytes> at start of FILESYSTEM.  Optionally "
+		"a suffix of K, M or G can be given to specify Kbytes, Mbytes "
+		"or Gbytes respectively (default 0 bytes).\n",
+	"\t-ig[nore-errors]\ttreat errors writing files to stdout as "
+		"non-fatal\n",
 	"\t-st[rict-errors]\ttreat all errors as fatal\n",
-	"\t-no-exit[-code]\t\tdon't set exit code (to nonzero) on non-fatal errors\n",
+	"\t-no-exit[-code]\t\tdon't set exit code (to nonzero) on non-fatal "
+		"errors\n",
 	"\n", "Filter options:", "\n",
 	"\t-no-wild[cards]\t\tdo not use wildcard matching in filenames\n",
-	"\t-r[egex]\t\ttreat filenames as POSIX regular expressions rather than use the default shell wildcard expansion (globbing)\n",
+	"\t-r[egex]\t\ttreat filenames as POSIX regular expressions rather "
+		"than use the default shell wildcard expansion (globbing)\n",
 	"\n", "Help options:", "\n",
 	"\t-h[elp]\t\t\tprint help summary information to stdout\n",
 	"\t-help-option <regex>\tprint the help information for Sqfscat "
@@ -243,18 +251,25 @@ static char *sqfscat_text[]={
 		"sections to pager (or stdout if not a terminal)\n",
 	"\t-ho <regex>\t\tshorthand alternative to -help-option\n",
 	"\t-hs <section>\t\tshorthand alternative to -help-section\n",
+	"\t-ha\t\t\tshorthand alternative to -help-all\n",
 	"\n", "Environment:", "\n",
 	"\tPAGER\t\t\tIf set, this is used as the name of the program used to "
 		"display the help text.  The value can be a simple command or "
 		"a pathname.  The default is /usr/bin/pager\n",
 	"\n", "Exit status:", "\n",
 	"  0\tThe file or files were output to stdout OK.\n",
-	"  1\tFATAL errors occurred, e.g. filesystem corruption, I/O errors.  Sqfscat did not continue and aborted.\n",
-	"  2\tNon-fatal errors occurred, e.g. not a regular file, or failed to resolve pathname.  Sqfscat continued and did not abort.\n",
-	"\nSee -ignore-errors, -strict-errors and -no-exit-code options for how they affect the exit status.\n",
+	"  1\tFATAL errors occurred, e.g. filesystem corruption, I/O errors.  "
+		"Sqfscat did not continue and aborted.\n",
+	"  2\tNon-fatal errors occurred, e.g. not a regular file, or failed to "
+		"resolve pathname.  Sqfscat continued and did not abort.\n",
+	"\nSee -ignore-errors, -strict-errors and -no-exit-code options for "
+		"how they affect the exit status.\n",
 	"\n", "See also (extra information elsewhere):", "\n",
-	"The README for the Squashfs-tools 4.6.1 release describing the new features can be read here https://github.com/plougher/squashfs-tools/blob/master/README-4.6.1\n",
-	"\nThe Squashfs-tools USAGE guide can be read here https://github.com/plougher/squashfs-tools/blob/master/USAGE-4.6\n",
+	"The README for the Squashfs-tools 4.6.1 release describing the new "
+		"features can be read here https://github.com/plougher/"
+		"squashfs-tools/blob/master/README-4.6.1\n",
+	"\nThe Squashfs-tools USAGE guide can be read here https://github.com/"
+		"plougher/squashfs-tools/blob/master/USAGE-4.6\n",
 	NULL,
 };
 
@@ -446,27 +461,27 @@ static void print_option_help(char *prog_name, char *option, char **sections, ch
 }
 
 
-void unsquashfs_help_all(char *name)
+void unsquashfs_help_all(void)
 {
-        print_help_all(name, UNSQUASHFS_SYNTAX, unsquashfs_text);
+        print_help_all("unsquashfs", UNSQUASHFS_SYNTAX, unsquashfs_text);
 }
 
 
-void unsquashfs_section(char *prog_name, char *opt_name, char *sec_name)
+void unsquashfs_section(char *opt_name, char *sec_name)
 {
-	print_section(prog_name, opt_name, sec_name, unsquashfs_sections, unsquashfs_text);
+	print_section("unsquashfs", opt_name, sec_name, unsquashfs_sections, unsquashfs_text);
 }
 
 
-void unsquashfs_option(char *prog_name, char *opt_name, char *pattern)
+void unsquashfs_option(char *opt_name, char *pattern)
 {
-	print_option(prog_name, opt_name, pattern, unsquashfs_options, unsquashfs_args, unsquashfs_text);
+	print_option("unsquashfs", opt_name, pattern, unsquashfs_options, unsquashfs_args, unsquashfs_text);
 }
 
 
-void unsquashfs_help(int error, char *prog_name)
+void unsquashfs_help(int error)
 {
-	print_help(error, prog_name, UNSQUASHFS_SYNTAX, unsquashfs_sections, unsquashfs_text);
+	print_help(error, "unsquashfs", UNSQUASHFS_SYNTAX, unsquashfs_sections, unsquashfs_text);
 }
 
 
@@ -503,4 +518,16 @@ void sqfscat_option(char *prog_name, char *opt_name, char *pattern)
 void sqfscat_help(int error, char *prog_name)
 {
 	print_help(error, prog_name, SQFSCAT_SYNTAX, sqfscat_sections, sqfscat_text);
+}
+
+
+void sqfscat_invalid_option(char *prog_name, char *opt_name)
+{
+	handle_invalid_option(prog_name, opt_name, sqfscat_sections, sqfscat_text);
+}
+
+
+void sqfscat_option_help(char *prog_name, char *option)
+{
+	print_option_help(prog_name, option, sqfscat_sections, sqfscat_text);
 }
